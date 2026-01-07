@@ -1,0 +1,22 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <span class="logo-text">SupplyChainX</span>
+    </div>
+
+    <nav class="nav-menu" [class.open]="isMenuOpen">
+      <a href="#" class="nav-link">Accueil</a>
+      <a href="#" class="nav-link">Modules</a>
+      <a href="#" class="nav-link">Documentations</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="/login" class="btn-login">Connexion</a>
+      <button class="menu-toggle" (click)="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>
