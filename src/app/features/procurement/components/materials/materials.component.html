@@ -4,9 +4,14 @@
       <h1>Matières Premières</h1>
       <p>Inventaire et gestion des stocks</p>
     </div>
-    <button class="btn btn-primary" (click)="createMaterial()">
-      <span>+</span> Nouvelle Matière
-    </button>
+    <div class="simple-flex">
+      <button class="btn btn-secondary" routerLink="/procurement/dashboard">
+        <span>📑</span> Dashboard
+      </button>
+      <button class="btn btn-primary" (click)="createMaterial()">
+        <span>+</span> Nouvelle Matière
+      </button>
+    </div>
   </div>
 
   <div *ngIf="loading()">Loading...</div>

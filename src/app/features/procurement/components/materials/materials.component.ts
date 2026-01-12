@@ -3,14 +3,15 @@ import {CommonModule} from '@angular/common';
 import {RawMaterialService} from '../../services/raw-material.service';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {SupplierService} from '../../services/supplier.service';
-import {Supplier} from '../../../../api/supplier.api';
+import {SupplierResponse} from '../../../../api/supplier.api';
 import {RawMaterialResponse, RawMaterialRequest} from '../../../../api/material.api';
+import {RouterLink} from '@angular/router';
 
 
 @Component({
   selector: 'app-materials',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   providers: [RawMaterialService],
   templateUrl: './materials.component.html',
   styleUrl: './materials.component.css'
@@ -26,7 +27,7 @@ export class MaterialsComponent implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
 
-  suppliers = signal<Supplier[]>([]);
+  suppliers = signal<SupplierResponse[]>([]);
 
   materialForm;
 

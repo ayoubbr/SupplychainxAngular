@@ -1,147 +1,153 @@
 <div class="orders-container">
-    <div class="page-header">
-        <div class="header-content">
-            <h1>Commandes d'Approvisionnement</h1>
-            <p>Suivi des commandes fournisseurs</p>
-        </div>
-        <button class="btn btn-primary" (click)="showForm = true">
-            <span>+</span> Nouvelle Commande
-        </button>
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Commandes d'Approvisionnement</h1>
+      <p>Suivi des commandes fournisseurs</p>
     </div>
+    <div class="simple-flex">
+      <button class="btn btn-secondary" routerLink="/procurement/dashboard">
+        <span>📑</span> Dashboard
+      </button>
+      <button class="btn btn-primary" (click)="showForm = true">
+        <span>+</span> Nouvelle Commande
+      </button>
+    </div>
+  </div>
 
-    <!-- Filters / Search -->
-    <div class="filters-bar glass-panel">
-        <div class="search-box">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder="Rechercher une commande..." class="search-input">
-        </div>
-        <div class="filter-actions">
-            <button class="btn btn-secondary btn-icon">⚡ Filtres</button>
-            <button class="btn btn-secondary btn-icon">📥 Exporter</button>
-        </div>
+  <!-- Filters / Search -->
+  <div class="filters-bar glass-panel">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Rechercher une commande..." class="search-input">
     </div>
+    <div class="filter-actions">
+      <button class="btn btn-secondary btn-icon">⚡ Filtres</button>
+      <button class="btn btn-secondary btn-icon">📥 Exporter</button>
+    </div>
+  </div>
 
-    <!-- Data Table -->
-    <div class="table-container glass-panel">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>ID Commande</th>
-                    <th>Date</th>
-                    <th>Fournisseur</th>
-                    <th>Montant</th>
-                    <th>Statut</th>
-                    <th>Date Livraison Prévue</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span class="id-badge">#CMD-2024-001</span></td>
-                    <td class="primary-text">05/01/2026</td>
-                    <td>MetalWorks Industries</td>
-                    <td>12,450.00 €</td>
-                    <td><span class="status-badge pending">En Attente</span></td>
-                    <td>10/01/2026</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-icon-small view" title="Voir">👁️</button>
-                            <button class="btn-icon-small edit" title="Modifier">✏️</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span class="id-badge">#CMD-2024-002</span></td>
-                    <td class="primary-text">03/01/2026</td>
-                    <td>Global Logistics Co.</td>
-                    <td>4,200.50 €</td>
-                    <td><span class="status-badge shipping">En Cours</span></td>
-                    <td>08/01/2026</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-icon-small view" title="Voir">👁️</button>
-                            <button class="btn-icon-small edit" title="Modifier">✏️</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span class="id-badge">#CMD-2023-128</span></td>
-                    <td class="primary-text">28/12/2025</td>
-                    <td>FastParts S.A.</td>
-                    <td>850.00 €</td>
-                    <td><span class="status-badge received">Reçue</span></td>
-                    <td>02/01/2026</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-icon-small view" title="Voir">👁️</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <!-- Data Table -->
+  <div class="table-container glass-panel">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>ID Commande</th>
+        <th>Date</th>
+        <th>Fournisseur</th>
+        <th>Montant</th>
+        <th>Statut</th>
+        <th>Date Livraison Prévue</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td><span class="id-badge">#CMD-2024-001</span></td>
+        <td class="primary-text">05/01/2026</td>
+        <td>MetalWorks Industries</td>
+        <td>12,450.00 €</td>
+        <td><span class="status-badge pending">En Attente</span></td>
+        <td>10/01/2026</td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-icon-small view" title="Voir">👁️</button>
+            <button class="btn-icon-small edit" title="Modifier">✏️</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="id-badge">#CMD-2024-002</span></td>
+        <td class="primary-text">03/01/2026</td>
+        <td>Global Logistics Co.</td>
+        <td>4,200.50 €</td>
+        <td><span class="status-badge shipping">En Cours</span></td>
+        <td>08/01/2026</td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-icon-small view" title="Voir">👁️</button>
+            <button class="btn-icon-small edit" title="Modifier">✏️</button>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="id-badge">#CMD-2023-128</span></td>
+        <td class="primary-text">28/12/2025</td>
+        <td>FastParts S.A.</td>
+        <td>850.00 €</td>
+        <td><span class="status-badge received">Reçue</span></td>
+        <td>02/01/2026</td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-icon-small view" title="Voir">👁️</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- Form Overlay -->
 <div class="form-overlay" *ngIf="showForm">
-    <div class="form-card glass-panel" (click)="$event.stopPropagation()">
-        <div class="form-header">
-            <h2>Nouvelle Commande</h2>
-            <button class="close-btn" (click)="showForm = false">✕</button>
+  <div class="form-card glass-panel" (click)="$event.stopPropagation()">
+    <div class="form-header">
+      <h2>Nouvelle Commande</h2>
+      <button class="close-btn" (click)="showForm = false">✕</button>
+    </div>
+
+    <form class="glass-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Fournisseur</label>
+          <select>
+            <option>MetalWorks Industries</option>
+            <option>Global Logistics Co.</option>
+            <option>FastParts S.A.</option>
+          </select>
         </div>
 
-        <form class="glass-form">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Fournisseur</label>
-                    <select>
-                        <option>MetalWorks Industries</option>
-                        <option>Global Logistics Co.</option>
-                        <option>FastParts S.A.</option>
-                    </select>
-                </div>
+        <div class="form-group">
+          <label>Date de commande</label>
+          <input type="date">
+        </div>
 
-                <div class="form-group">
-                    <label>Date de commande</label>
-                    <input type="date">
-                </div>
+        <div class="form-group">
+          <label>Date de livraison souhaitée</label>
+          <input type="date">
+        </div>
 
-                <div class="form-group">
-                    <label>Date de livraison souhaitée</label>
-                    <input type="date">
-                </div>
+        <div class="form-group">
+          <label>Statut</label>
+          <select>
+            <option>EN_ATTENTE</option>
+            <option>EN_COURS</option>
+            <option>RECUE</option>
+          </select>
+        </div>
 
-                <div class="form-group">
-                    <label>Statut</label>
-                    <select>
-                        <option>EN_ATTENTE</option>
-                        <option>EN_COURS</option>
-                        <option>RECUE</option>
-                    </select>
-                </div>
+        <!-- Items placeholder -->
+        <div class="form-group full-width">
+          <label>Articles</label>
+          <div class="items-placeholder glass-panel">
+            <p style="text-align: center; color: #94a3b8; padding: 1rem;">
+              Liste des articles (Matière Première + Quantité)
+            </p>
+            <button type="button" class="btn btn-secondary btn-small" style="width: 100%">+ Ajouter
+              Article
+            </button>
+          </div>
+        </div>
 
-                <!-- Items placeholder -->
-                <div class="form-group full-width">
-                    <label>Articles</label>
-                    <div class="items-placeholder glass-panel">
-                        <p style="text-align: center; color: #94a3b8; padding: 1rem;">
-                            Liste des articles (Matière Première + Quantité)
-                        </p>
-                        <button type="button" class="btn btn-secondary btn-small" style="width: 100%">+ Ajouter
-                            Article</button>
-                    </div>
-                </div>
+        <div class="form-group full-width">
+          <label>Notes / Instructions</label>
+          <textarea rows="2"></textarea>
+        </div>
+      </div>
 
-                <div class="form-group full-width">
-                    <label>Notes / Instructions</label>
-                    <textarea rows="2"></textarea>
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button type="button" class="btn btn-secondary" (click)="showForm = false">Annuler</button>
-                <button type="submit" class="btn btn-primary">Créer Commande</button>
-            </div>
-        </form>
-    </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="showForm = false">Annuler</button>
+        <button type="submit" class="btn btn-primary">Créer Commande</button>
+      </div>
+    </form>
+  </div>
 </div>

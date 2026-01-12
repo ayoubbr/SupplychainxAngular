@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Supplier, SupplierApi, SupplierPayload} from '../../../api/supplier.api';
+import {SupplierResponse, SupplierApi, SupplierRequest} from '../../../api/supplier.api';
 import {catchError, Observable, throwError} from 'rxjs';
 
 
@@ -11,14 +11,26 @@ export class SupplierService {
   constructor(private supplierApi: SupplierApi) {
   }
 
-  getAllSuppliers(): Observable<Supplier[]> {
+  getAllSuppliers(): Observable<SupplierResponse[]> {
     return this.supplierApi.findAll().pipe(
       catchError(error => throwError(() => error))
     );
   }
 
-  createSupplier(payload: SupplierPayload): Observable<Supplier> {
+  createSupplier(payload: SupplierRequest): Observable<SupplierResponse> {
     return this.supplierApi.create(payload).pipe(
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  updateSupplier(id: number, payload: SupplierRequest): Observable<SupplierResponse> {
+    return this.supplierApi.update(id, payload).pipe(
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  deleteSupplier(id: number): Observable<void> {
+    return this.supplierApi.delete(id).pipe(
       catchError(error => throwError(() => error))
     );
   }

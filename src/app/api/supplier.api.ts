@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
-export interface Supplier {
+export interface SupplierResponse {
   id: number;
   name: string;
   contact: string;
@@ -10,7 +10,7 @@ export interface Supplier {
   leadTime: number;
 }
 
-export interface SupplierPayload {
+export interface SupplierRequest {
   name: string;
   contact: string;
   rating: number;
@@ -26,11 +26,19 @@ export class SupplierApi {
   constructor(private http: HttpClient) {
   }
 
-  findAll(): Observable<Supplier[]> {
-    return this.http.get<Supplier[]>(this.baseUrl);
+  findAll(): Observable<SupplierResponse[]> {
+    return this.http.get<SupplierResponse[]>(this.baseUrl);
   }
 
-  create(payload: SupplierPayload): Observable<Supplier> {
-    return this.http.post<Supplier>(this.baseUrl, payload);
+  create(payload: SupplierRequest): Observable<SupplierResponse> {
+    return this.http.post<SupplierResponse>(this.baseUrl, payload);
+  }
+
+  update(id: number, payload: SupplierRequest): Observable<SupplierResponse> {
+    return this.http.put<SupplierResponse>(`${this.baseUrl}/${id}`, payload);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 }
