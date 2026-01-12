@@ -9,19 +9,6 @@
     </button>
   </div>
 
-  <!-- Filters / Search -->
-  <!--  <div class="filters-bar glass-panel">-->
-  <!--    <div class="search-box">-->
-  <!--      <span class="search-icon">🔍</span>-->
-  <!--      <input type="text" placeholder="Rechercher une matière..." class="search-input">-->
-  <!--    </div>-->
-  <!--    <div class="filter-actions">-->
-  <!--      <button class="btn btn-secondary btn-icon">⚡ Filtres</button>-->
-  <!--      <button class="btn btn-secondary btn-icon">📥 Exporter</button>-->
-  <!--    </div>-->
-  <!--  </div>-->
-
-
   <div *ngIf="loading()">Loading...</div>
   <div *ngIf="error()" class="error">
     {{ error() }}
@@ -59,7 +46,10 @@
             <button class="btn-icon-small edit" title="Modifier"
                     (click)="editMaterial(material)">✏️
             </button>
-            <button class="btn-icon-small delete" title="Supprimer">🗑️</button>
+            <button class="btn-icon-small delete"
+                    (click)="deleteMaterial(material.id)"
+                    title="Supprimer">🗑️
+            </button>
           </div>
         </td>
       </tr>
@@ -81,7 +71,7 @@
       <button class="close-btn" (click)="showForm = false">✕</button>
     </div>
 
-    <form class="glass-form" [formGroup]="materialForm">
+    <form class="glass-form" [formGroup]="materialForm" (ngSubmit)="submitMaterial()">
       <div class="form-grid">
         <div class="form-group">
           <label>Nom de la matière</label>
@@ -91,6 +81,7 @@
         <div class="form-group">
           <label>Unité de mesure</label>
           <select formControlName="unit">
+            <option value="">Select a unit</option>
             <option value="kg">Kilogramme (kg)</option>
             <option value="l">Litre (L)</option>
             <option value="pcs">Pièce (Pcs)</option>
@@ -108,15 +99,19 @@
           <input type="number" formControlName="stock" placeholder="0">
         </div>
 
-<!--        <div class="form-group full-width">-->
-<!--          <label>Description / Notes</label>-->
-<!--          <textarea rows="3" placeholder="Détails supplémentaires..."></textarea>-->
-<!--        </div>-->
+        <div class="form-group">
+          <label>Fournisseurs</label>
+          <select multiple formControlName="supplierIds">
+            <option *ngFor="let supplier of suppliers()" [value]="supplier.id">
+              {{ supplier.name }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div class="form-actions">
         <button type="button" class="btn btn-secondary" (click)="showForm = false">Annuler</button>
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="submit" class="btn btn-primary"> {{ isEditMode ? 'Mettre à jour' : 'Créer' }}</button>
       </div>
     </form>
   </div>

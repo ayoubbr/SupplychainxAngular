@@ -3,12 +3,21 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 
-export interface RawMaterial {
+export interface RawMaterialResponse {
   id: number;
   name: string;
   stock: number;
   minStock: number;
   unit: string;
+  supplierIds: number[];
+}
+
+export interface RawMaterialRequest {
+  name: string;
+  stock: number;
+  minStock: number;
+  unit: string;
+  supplierIds: number[];
 }
 
 
@@ -20,9 +29,20 @@ export class MaterialApi {
   constructor(private http: HttpClient) {
   }
 
-  findAll(): Observable<RawMaterial[]> {
-    return this.http.get<RawMaterial[]>(this.baseUrl);
+  findAll(): Observable<RawMaterialResponse[]> {
+    return this.http.get<RawMaterialResponse[]>(this.baseUrl);
   }
 
+  create(payload: RawMaterialRequest): Observable<RawMaterialResponse> {
+    return this.http.post<RawMaterialResponse>(this.baseUrl, payload);
+  }
+
+  update(id: number, payload: RawMaterialRequest): Observable<RawMaterialResponse> {
+    return this.http.put<RawMaterialResponse>(`${this.baseUrl}/${id}`, payload);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 
 }
