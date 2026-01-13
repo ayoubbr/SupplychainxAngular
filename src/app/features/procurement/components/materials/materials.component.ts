@@ -1,11 +1,12 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {RawMaterialService} from '../../services/raw-material.service';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
-import {SupplierService} from '../../services/supplier.service';
-import {SupplierResponse} from '../../../../api/supplier.api';
-import {RawMaterialResponse, RawMaterialRequest} from '../../../../api/material.api';
-import {RouterLink} from '@angular/router';
+import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RawMaterialService } from '../../services/raw-material.service';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { SupplierService } from '../../services/supplier.service';
+import { SupplierResponse } from '../../../../api/supplier.api';
+import { ToastService } from '../../../../shared/services/toast.service';
+import { RawMaterialResponse, RawMaterialRequest } from '../../../../api/material.api';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
@@ -32,8 +33,9 @@ export class MaterialsComponent implements OnInit {
   materialForm;
 
   constructor(private rawMaterialService: RawMaterialService,
-              private supplierService: SupplierService,
-              private fb: FormBuilder) {
+    private supplierService: SupplierService,
+    private toastService: ToastService,
+    private fb: FormBuilder) {
     this.materialForm = this.fb.group({
       name: this.fb.nonNullable.control(''),
       unit: this.fb.nonNullable.control(''),
@@ -54,16 +56,16 @@ export class MaterialsComponent implements OnInit {
 
 
     this.rawMaterialService.getAllRawMetrials().subscribe({
-        next: materials => {
-          this.rawMaterials.set(materials);
-          // this.totalElements.set(response.totalElements);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set('Unable to load raw materials');
-          this.loading.set(false);
-        }
+      next: materials => {
+        this.rawMaterials.set(materials);
+        // this.totalElements.set(response.totalElements);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.toastService.error('Unable to load raw materials');
+        this.loading.set(false);
       }
+    }
     )
   }
 
@@ -105,12 +107,13 @@ export class MaterialsComponent implements OnInit {
       next: () => {
         this.rawMaterials.update(materials =>
           materials.filter(m => m.id !== materialId));
+        this.toastService.success('Matière première supprimée avec succès');
       },
       error: () => {
-        this.error.set('Impossible de supprimer la matière premiere');
+        this.toastService.error('Impossible de supprimer la matière premiere');
       }
     })
-    ;
+      ;
   }
 
   closeForm() {
@@ -145,9 +148,10 @@ export class MaterialsComponent implements OnInit {
         next: () => {
           this.closeForm();
           this.loadRawMaterials(); // refresh list
+          this.toastService.success('Matière première mise à jour avec succès');
         },
         error: () => {
-          this.error.set('Failed to update material');
+          this.toastService.error('Failed to update material');
         }
       });
 
@@ -159,9 +163,10 @@ export class MaterialsComponent implements OnInit {
       next: () => {
         this.closeForm();
         this.loadRawMaterials(); // refresh list
+        this.toastService.success('Matière première créée avec succès');
       },
       error: () => {
-        this.error.set('Failed to create material');
+        this.toastService.error('Failed to create material');
       }
     });
   }
@@ -169,7 +174,7 @@ export class MaterialsComponent implements OnInit {
   loadSuppliers() {
     this.supplierService.getAllSuppliers().subscribe({
       next: suppliers => this.suppliers.set(suppliers),
-      error: () => this.error.set('Failed to load suppliers')
+      error: () => this.toastService.error('Failed to load suppliers')
     });
   }
 }

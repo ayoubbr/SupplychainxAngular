@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {SupplyOrderApi} from '../../../../api/supply-order.api';
-import {SupplyOrder} from '../../../../api/supply-order.model';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {RouterLink} from '@angular/router';
-import {MaterialApi} from '../../../../api/material.api';
-import {SupplierService} from '../../services/supplier.service';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SupplyOrderApi } from '../../../../api/supply-order.api';
+import { SupplyOrder } from '../../../../api/supply-order.model';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { MaterialApi } from '../../../../api/material.api';
+import { SupplierService } from '../../services/supplier.service';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 export interface SupplierWithMaterials {
   id: number;
@@ -60,6 +61,7 @@ export class SupplyOrdersComponent implements OnInit {
     private api: SupplyOrderApi,
     private materialApi: MaterialApi,
     private supplierService: SupplierService,
+    private toastService: ToastService,
     private fb: FormBuilder
   ) {
   }
@@ -93,7 +95,7 @@ export class SupplyOrdersComponent implements OnInit {
   // Select a supplier and move to material selection
   selectSupplier(supplier: SupplierWithMaterials) {
     this.selectedSupplier = supplier;
-    this.form.patchValue({supplierId: supplier.id});
+    this.form.patchValue({ supplierId: supplier.id });
     this.selectedRawMaterialIds.clear();
     this.formStep = 'material-selection';
   }
@@ -153,7 +155,7 @@ export class SupplyOrdersComponent implements OnInit {
 
   submit() {
     if (this.form.invalid) {
-      alert('Veuillez remplir tous les champs requis');
+      this.toastService.error('Veuillez remplir tous les champs requis');
       return;
     }
 
@@ -175,9 +177,10 @@ export class SupplyOrdersComponent implements OnInit {
         this.showForm = false;
         this.resetForm();
         this.loadOrders();
+        this.toastService.success('Supply Order created successfully');
       },
       error: (err) => {
-        this.errorMessage = err.error.message;
+        this.toastService.error(err.error.message || 'Failed to create supply order');
         this.showForm = false;
         console.error(err);
       }
@@ -185,7 +188,7 @@ export class SupplyOrdersComponent implements OnInit {
   }
 
   resetForm() {
-    this.form.reset({status: 'EN_ATTENTE'});
+    this.form.reset({ status: 'EN_ATTENTE' });
     this.rawMaterials.clear();
     this.selectedRawMaterialIds.clear();
     this.selectedSupplier = null;
@@ -209,15 +212,15 @@ export class SupplyOrdersComponent implements OnInit {
       {
         next: (data) => {
           if (data == 0) {
-            this.errorMessage = 'Cannot delete a Supply Order with Status RECUE';
-            setTimeout(() => this.errorMessage = null, 4000);
+            this.toastService.error('Cannot delete a Supply Order with Status RECUE');
             return;
           }
 
           this.loadOrders();
+          this.toastService.success('Supply Order deleted successfully');
         },
         error: () => {
-          this.errorMessage = 'Server error while deleting supply order';
+          this.toastService.error('Server error while deleting supply order');
         }
       }
     );
@@ -228,6 +231,12 @@ export class SupplyOrdersComponent implements OnInit {
     if (!confirmConst) {
       return;
     }
-    this.api.markAsReceived(id).subscribe(() => this.loadOrders());
+    this.api.markAsReceived(id).subscribe({
+      next: () => {
+        this.loadOrders();
+        this.toastService.success('Order marked as received');
+      },
+      error: () => this.toastService.error('Failed to mark order as received')
+    });
   }
 }

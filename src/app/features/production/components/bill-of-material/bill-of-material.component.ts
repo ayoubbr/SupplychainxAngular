@@ -1,12 +1,13 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
-import {RouterLink} from '@angular/router';
-import {BillOfMaterialService} from '../../services/bill-of-material.service';
-import {BillOfMaterialResponse, BillOfMaterialRequest, ProductResponse} from '../../../../api/production.api';
-import {ProductService} from '../../services/product.service';
-import {RawMaterialService} from '../../../procurement/services/raw-material.service';
-import {RawMaterialResponse} from '../../../../api/material.api';
+import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { BillOfMaterialService } from '../../services/bill-of-material.service';
+import { BillOfMaterialResponse, BillOfMaterialRequest, ProductResponse } from '../../../../api/production.api';
+import { ProductService } from '../../services/product.service';
+import { RawMaterialService } from '../../../procurement/services/raw-material.service';
+import { RawMaterialResponse } from '../../../../api/material.api';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-bill-of-material',
@@ -32,9 +33,10 @@ export class BillOfMaterialComponent implements OnInit {
   bomForm;
 
   constructor(private bomService: BillOfMaterialService,
-              private productService: ProductService,
-              private rawMaterialService: RawMaterialService,
-              private fb: FormBuilder) {
+    private productService: ProductService,
+    private rawMaterialService: RawMaterialService,
+    private toastService: ToastService,
+    private fb: FormBuilder) {
     this.bomForm = this.fb.group({
       productId: this.fb.nonNullable.control(0),
       rawMaterialId: this.fb.nonNullable.control(0),
@@ -53,29 +55,29 @@ export class BillOfMaterialComponent implements OnInit {
     this.error.set(null);
 
     this.bomService.getAllBOMs().subscribe({
-        next: boms => {
-          this.billOfMaterials.set(boms);
-          this.loading.set(false);
-        },
-        error: () => {
-          this.error.set('Unable to load bill of materials');
-          this.loading.set(false);
-        }
+      next: boms => {
+        this.billOfMaterials.set(boms);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.toastService.error('Unable to load bill of materials');
+        this.loading.set(false);
       }
+    }
     )
   }
 
   loadProducts() {
     this.productService.getAllProducts().subscribe({
       next: (data) => this.products.set(data),
-      error: () => this.error.set('Failed to load products')
+      error: () => this.toastService.error('Failed to load products')
     });
   }
 
   loadRawMaterials() {
     this.rawMaterialService.getAllRawMetrials().subscribe({
       next: (data) => this.rawMaterials.set(data),
-      error: () => this.error.set('Failed to load raw materials')
+      error: () => this.toastService.error('Failed to load raw materials')
     });
   }
 
@@ -124,9 +126,10 @@ export class BillOfMaterialComponent implements OnInit {
       next: () => {
         this.billOfMaterials.update(boms =>
           boms.filter(b => b.billOfMaterialId !== bomId));
+        this.toastService.success('BOM deleted successfully');
       },
       error: () => {
-        this.error.set('Impossible de supprimer le BOM');
+        this.toastService.error('Impossible de supprimer le BOM');
       }
     });
   }
@@ -157,11 +160,11 @@ export class BillOfMaterialComponent implements OnInit {
         next: () => {
           this.closeForm();
           this.loadBOMs();
+          this.toastService.success('BOM updated successfully');
         },
         error: (err) => {
-          this.error.set(err.error.message);
+          this.toastService.error(err.error.message || 'Failed to update BOM');
           console.log(err.error);
-          this.closeForm();
         }
       });
 
@@ -173,11 +176,11 @@ export class BillOfMaterialComponent implements OnInit {
       next: () => {
         this.closeForm();
         this.loadBOMs();
+        this.toastService.success('BOM created successfully');
       },
       error: (err) => {
-        this.error.set(err.error.message);
+        this.toastService.error(err.error.message || 'Failed to create BOM');
         console.log(err.error);
-        this.closeForm();
       }
     });
   }

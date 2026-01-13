@@ -1,9 +1,10 @@
-import {Component, OnInit, signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
-import {SupplierService} from '../../services/supplier.service';
-import {SupplierRequest, SupplierResponse} from '../../../../api/supplier.api';
-import {RouterLink} from '@angular/router';
+import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { SupplierService } from '../../services/supplier.service';
+import { SupplierRequest, SupplierResponse } from '../../../../api/supplier.api';
+import { ToastService } from '../../../../shared/services/toast.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-suppliers',
@@ -24,6 +25,7 @@ export class SuppliersComponent {
 
   constructor(
     private supplierService: SupplierService,
+    private toastService: ToastService,
     private fb: FormBuilder
   ) {
     this.supplierForm = this.fb.nonNullable.group({
@@ -41,7 +43,7 @@ export class SuppliersComponent {
   loadSuppliers() {
     this.supplierService.getAllSuppliers().subscribe({
       next: data => this.suppliers.set(data),
-      error: () => this.error.set('Failed to load suppliers')
+      error: () => this.toastService.error('Failed to load suppliers')
     });
   }
 
@@ -82,8 +84,9 @@ export class SuppliersComponent {
           next: () => {
             this.closeForm();
             this.loadSuppliers();
+            this.toastService.success('Supplier updated successfully');
           },
-          error: () => this.error.set('Failed to update supplier')
+          error: () => this.toastService.error('Failed to update supplier')
         });
       return;
     }
@@ -92,8 +95,9 @@ export class SuppliersComponent {
       next: () => {
         this.closeForm();
         this.loadSuppliers();
+        this.toastService.success('Supplier created successfully');
       },
-      error: () => this.error.set('Failed to create supplier')
+      error: () => this.toastService.error('Failed to create supplier')
     });
   }
 
@@ -101,9 +105,11 @@ export class SuppliersComponent {
     if (!confirm('Supprimer ce fournisseur ?')) return;
 
     this.supplierService.deleteSupplier(id).subscribe({
-      next: () =>
-        this.suppliers.update(list => list.filter(s => s.id !== id)),
-      error: () => this.error.set('Impossible de supprimer le fournisseur')
+      next: () => {
+        this.suppliers.update(list => list.filter(s => s.id !== id));
+        this.toastService.success('Supplier deleted successfully');
+      },
+      error: () => this.toastService.error('Impossible de supprimer le fournisseur')
     });
   }
 

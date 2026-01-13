@@ -26,55 +26,44 @@
     </div>
   </div>
 
-  <div *ngIf="errorMessage" class="error-alert">
-    ⚠️ {{ errorMessage }}
-  </div>
-
   <!-- Data Table -->
   <div class="table-container glass-panel">
     <table class="data-table">
       <thead>
-      <tr>
-        <th>ID Commande</th>
-        <th>Date</th>
-        <th>Fournisseur</th>
-        <th>Number of RM</th>
-        <th>Statut</th>
-        <th>Date Livraison Prévue</th>
-        <th>Actions</th>
-      </tr>
+        <tr>
+          <th>ID Commande</th>
+          <th>Date</th>
+          <th>Fournisseur</th>
+          <th>Number of RM</th>
+          <th>Statut</th>
+          <th>Date Livraison Prévue</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let order of orders">
-        <td><span class="id-badge">#{{ order.id }}</span></td>
-        <td>{{ order.date }}</td>
-        <td>{{ order.supplier.name }}</td>
-        <td>{{ order.rawMaterials.length }}</td>
-        <td>
-          <span class="status-badge" [ngClass]="order.status.toLowerCase()">
-          {{ order.status.replace('_', ' ') }}
-        </span>
-        </td>
-        <td>{{ order.supplier.leadTime }} (Jours Apres Date)</td>
-        <td>
-          <div class="action-buttons">
-            <button class="btn-icon-small view" title="Voir">👁️</button>
+        <tr *ngFor="let order of orders">
+          <td><span class="id-badge">#{{ order.id }}</span></td>
+          <td>{{ order.date }}</td>
+          <td>{{ order.supplier.name }}</td>
+          <td>{{ order.rawMaterials.length }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="order.status.toLowerCase()">
+              {{ order.status.replace('_', ' ') }}
+            </span>
+          </td>
+          <td>{{ order.supplier.leadTime }} (Jours Apres Date)</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon-small view" title="Voir">👁️</button>
 
-            <button
-              *ngIf="order.status !== 'RECUE'"
-              class="btn-icon-small edit"
-              (click)="receive(order.id)"
-            >✅
-            </button>
+              <button *ngIf="order.status !== 'RECUE'" class="btn-icon-small edit" (click)="receive(order.id)">✅
+              </button>
 
-            <button
-              class="btn-icon-small delete"
-              (click)="delete(order.id)"
-            >🗑️
-            </button>
-          </div>
-        </td>
-      </tr>
+              <button class="btn-icon-small delete" (click)="delete(order.id)">🗑️
+              </button>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -93,11 +82,8 @@
       <h3 style="margin-bottom: 1rem; color: #e2e8f0;">Choisir un Fournisseur</h3>
 
       <div class="suppliers-list">
-        <div
-          *ngFor="let supplier of availableSuppliers"
-          class="supplier-card glass-panel"
-          (click)="selectSupplier(supplier)"
-        >
+        <div *ngFor="let supplier of availableSuppliers" class="supplier-card glass-panel"
+          (click)="selectSupplier(supplier)">
           <div class="supplier-header">
             <div>
               <h4 class="supplier-name">{{ supplier.name }}</h4>
@@ -112,10 +98,7 @@
           <div class="supplier-materials">
             <p class="materials-label">Matières premières disponibles ({{ supplier.rawMaterials.length }}):</p>
             <div class="materials-tags">
-              <span
-                *ngFor="let rm of supplier.rawMaterials"
-                class="material-tag"
-              >
+              <span *ngFor="let rm of supplier.rawMaterials" class="material-tag">
                 {{ rm.name }}
               </span>
             </div>
@@ -147,12 +130,8 @@
       </h3>
 
       <div class="raw-materials-grid">
-        <div
-          *ngFor="let rm of selectedSupplier?.rawMaterials"
-          class="raw-material-card"
-          [class.selected]="isRawMaterialSelected(rm.id)"
-          (click)="toggleRawMaterialSelection(rm.id)"
-        >
+        <div *ngFor="let rm of selectedSupplier?.rawMaterials" class="raw-material-card"
+          [class.selected]="isRawMaterialSelected(rm.id)" (click)="toggleRawMaterialSelection(rm.id)">
           <div class="card-content">
             <span class="material-name">{{ rm.name }}</span>
             <span class="checkbox">
@@ -189,14 +168,14 @@
           <input type="date" formControlName="orderDate">
         </div>
 
-<!--        <div class="form-group">-->
-<!--          <label>Statut</label>-->
-<!--          <select formControlName="status">-->
-<!--            <option value="EN_ATTENTE">EN_ATTENTE</option>-->
-<!--            <option value="EN_COURS">EN_COURS</option>-->
-<!--            <option value="RECUE">RECUE</option>-->
-<!--          </select>-->
-<!--        </div>-->
+        <!--        <div class="form-group">-->
+        <!--          <label>Statut</label>-->
+        <!--          <select formControlName="status">-->
+        <!--            <option value="EN_ATTENTE">EN_ATTENTE</option>-->
+        <!--            <option value="EN_COURS">EN_COURS</option>-->
+        <!--            <option value="RECUE">RECUE</option>-->
+        <!--          </select>-->
+        <!--        </div>-->
       </div>
 
       <!-- Raw Materials Quantities -->
@@ -205,11 +184,8 @@
           Quantités des Matières Premières
         </h3>
 
-        <div
-          *ngFor="let item of rawMaterials.controls; let i = index"
-          [formGroupName]="i"
-          class="material-detail-card glass-panel"
-        >
+        <div *ngFor="let item of rawMaterials.controls; let i = index" [formGroupName]="i"
+          class="material-detail-card glass-panel">
           <div class="material-row">
             <div class="material-info">
               <span class="material-number">{{ i + 1 }}.</span>
@@ -218,13 +194,7 @@
 
             <div class="form-group compact">
               <label>Quantité *</label>
-              <input
-                type="number"
-                formControlName="quantity"
-                min="1"
-                placeholder="Qté"
-                class="quantity-input"
-              >
+              <input type="number" formControlName="quantity" min="1" placeholder="Qté" class="quantity-input">
             </div>
           </div>
         </div>
@@ -292,7 +262,8 @@
     gap: 0.5rem;
   }
 
-  .badge-rating, .badge-lead {
+  .badge-rating,
+  .badge-lead {
     padding: 0.25rem 0.75rem;
     border-radius: 12px;
     font-size: 0.875rem;
