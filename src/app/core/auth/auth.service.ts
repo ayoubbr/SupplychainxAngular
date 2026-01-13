@@ -67,9 +67,19 @@ export class AuthService {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             // Expecting payload to have 'sub' and 'roles' as per standard JWT or Spring Security
+            // Handle roles whether they are ["ROLE"] or [{authority: "ROLE"}]
+            let roles: string[] = [];
+            if (Array.isArray(payload.roles)) {
+                roles = payload.roles.map((r: any) => {
+                    if (typeof r === 'string') return r;
+                    if (r && typeof r === 'object' && 'authority' in r) return r.authority;
+                    return String(r);
+                });
+            }
+
             const user: User = {
                 username: payload.sub,
-                roles: payload.roles || []
+                roles: roles
             };
 
             this.currentUser.set(user);

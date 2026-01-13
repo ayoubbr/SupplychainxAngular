@@ -1,6 +1,6 @@
-import {Component, computed, Signal} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {AuthService, User} from '../../../core/auth/auth.service';
+import { Component, computed, Signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AuthService, User } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -15,15 +15,7 @@ import {AuthService, User} from '../../../core/auth/auth.service';
           </div>
           <h1>{{ user()?.username }}</h1>
           <div class="roles">
-            <!--            <span class="role-badge" *ngFor="let role of user()?.roles">{{ role }}</span>-->
-            @for (role of user()?.roles; track role) {
-              <span class="role-badge">
-                <pre>{{ user()?.roles | json }}</pre>
-<!--                 {{ role.authority?.replace('ROLE_', '') }}-->
-              </span>
-            } @empty {
-              <span class="role-badge">No Roles Assigned</span>
-            }
+            <span class="role-badge" *ngFor="let role of user()?.roles">{{ role }}</span>
           </div>
         </div>
 
@@ -118,6 +110,5 @@ export class ProfileComponent {
 
   constructor(private authService: AuthService) {
     this.user = this.authService.currentUser;
-    console.log(this.user());
   }
 }
