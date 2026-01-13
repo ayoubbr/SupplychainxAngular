@@ -9,6 +9,9 @@ import { SupplyOrdersComponent } from './features/procurement/components/supply-
 import { ProductsComponent } from './features/production/components/products/products.component';
 import { BillOfMaterialComponent } from './features/production/components/bill-of-material/bill-of-material.component';
 import { ProductionOrdersComponent } from './features/production/components/production-orders/production-orders.component';
+import { authGuard } from './core/guards/auth.guard';
+import { RegisterComponent } from './features/auth/register/register.component';
+import { ProfileComponent } from './features/users/profile/profile.component';
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -21,5 +24,7 @@ export const routes: Routes = [
   { path: "production/bill-of-materials", component: BillOfMaterialComponent },
   { path: "production/production-orders", component: ProductionOrdersComponent },
   { path: "login", component: LoginComponent },
+  { path: "register", component: RegisterComponent },
+  { path: "profile", component: ProfileComponent },
   { path: "**", redirectTo: "" },
 ];

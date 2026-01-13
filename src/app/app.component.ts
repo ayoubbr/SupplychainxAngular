@@ -3,12 +3,17 @@ import { RouterOutlet } from '@angular/router';
 
 import { ToastComponent } from './shared/components/toast/toast.component';
 
+import { CommonModule } from '@angular/common';
+import { AuthService } from './core/auth/auth.service';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ToastComponent],
+  imports: [RouterOutlet, ToastComponent, CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  constructor(public authService: AuthService) { }
 }
