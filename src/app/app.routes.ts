@@ -8,6 +8,7 @@ import { MaterialsComponent } from './features/procurement/components/materials/
 import { SupplyOrdersComponent } from './features/procurement/components/supply-orders/supply-orders.component';
 import { ProductsComponent } from './features/production/components/products/products.component';
 import { BillOfMaterialComponent } from './features/production/components/bill-of-material/bill-of-material.component';
+import { ProductionOrdersComponent } from './features/production/components/production-orders/production-orders.component';
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -18,7 +19,7 @@ export const routes: Routes = [
   { path: "production/dashboard", component: DC },
   { path: "production/products", component: ProductsComponent },
   { path: "production/bill-of-materials", component: BillOfMaterialComponent },
-  // { path: "production/production-orders", component: BillOfMaterialComponent },
+  { path: "production/production-orders", component: ProductionOrdersComponent },
   { path: "login", component: LoginComponent },
   { path: "**", redirectTo: "" },
 ];
