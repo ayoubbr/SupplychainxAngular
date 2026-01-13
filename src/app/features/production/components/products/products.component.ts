@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { ProductResponse, ProductRequest } from '../../../../api/production.api';
+import { ToastService } from '../../../../shared/services/toast.service';
 
 @Component({
     selector: 'app-products',
@@ -27,6 +28,7 @@ export class ProductsComponent implements OnInit {
     productForm;
 
     constructor(private productService: ProductService,
+        private toastService: ToastService,
         private fb: FormBuilder) {
         this.productForm = this.fb.group({
             name: this.fb.nonNullable.control(''),
@@ -50,7 +52,7 @@ export class ProductsComponent implements OnInit {
                 this.loading.set(false);
             },
             error: () => {
-                this.error.set('Unable to load products');
+                this.toastService.error('Unable to load products');
                 this.loading.set(false);
             }
         }
@@ -91,9 +93,10 @@ export class ProductsComponent implements OnInit {
             next: () => {
                 this.products.update(products =>
                     products.filter(p => p.id !== productId));
+                this.toastService.success('Produit supprimé avec succès');
             },
             error: () => {
-                this.error.set('Impossible de supprimer le produit');
+                this.toastService.error('Impossible de supprimer le produit');
             }
         });
     }
@@ -128,9 +131,10 @@ export class ProductsComponent implements OnInit {
                 next: () => {
                     this.closeForm();
                     this.loadProducts(); // refresh list
+                    this.toastService.success('Produit mis à jour avec succès');
                 },
                 error: () => {
-                    this.error.set('Failed to update product');
+                    this.toastService.error('Failed to update product');
                 }
             });
 
@@ -142,10 +146,12 @@ export class ProductsComponent implements OnInit {
             next: () => {
                 this.closeForm();
                 this.loadProducts(); // refresh list
+                this.toastService.success('Produit créé avec succès');
             },
             error: () => {
-                this.error.set('Failed to create product');
+                this.toastService.error('Failed to create product');
             }
         });
     }
 }
+

@@ -15,49 +15,42 @@
   </div>
 
   <div *ngIf="loading()">Loading...</div>
-  <div *ngIf="error()" class="error">
-    {{ error() }}
-  </div>
+
 
   <!-- Data Table -->
   <div class="table-container glass-panel">
     <table class="data-table" *ngIf="!loading() && products().length">
       <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Coût</th>
-        <th>Temps de Prod (mins)</th>
-        <th>Stock</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Coût</th>
+          <th>Temps de Prod (mins)</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let product of products()">
-        <td>{{ product.id }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.cost | currency:'EUR':'symbol' }}</td>
-        <td>{{ product.productionTime }}</td>
-        <td>{{ product.stock }}</td>
-        <td>
-        <span class="status-badge " [class.warning]="product.stock < 10"
-              [class.success]="product.stock >= 10">
-          {{ product.stock < 10 ? 'LOW' : 'OK' }}
-        </span>
-        </td>
-        <td>
-          <div class="action-buttons">
-            <button class="btn-icon-small edit" title="Modifier"
-                    (click)="editProduct(product)">✏️
-            </button>
-            <button class="btn-icon-small delete"
-                    (click)="deleteProduct(product.id)"
-                    title="Supprimer">🗑️
-            </button>
-          </div>
-        </td>
-      </tr>
+        <tr *ngFor="let product of products()">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.cost | currency:'EUR':'symbol' }}</td>
+          <td>{{ product.productionTime }}</td>
+          <td>{{ product.stock }}</td>
+          <td>
+            <span class="status-badge " [class.warning]="product.stock < 10" [class.success]="product.stock >= 10">
+              {{ product.stock < 10 ? 'LOW' : 'OK' }} </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-icon-small edit" title="Modifier" (click)="editProduct(product)">✏️
+              </button>
+              <button class="btn-icon-small delete" (click)="deleteProduct(product.id)" title="Supprimer">🗑️
+              </button>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
 
