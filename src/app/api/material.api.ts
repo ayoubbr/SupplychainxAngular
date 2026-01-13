@@ -20,6 +20,20 @@ export interface RawMaterialRequest {
   supplierIds: number[];
 }
 
+interface RawMaterial {
+  id: number;
+  name: string;
+  suppliers: Supplier[];
+}
+
+interface Supplier {
+  id: number;
+  name: string;
+  contact: string;
+  rating: number;
+  leadTime: number;
+}
+
 
 @Injectable({providedIn: 'root'})
 export class MaterialApi {
@@ -31,6 +45,10 @@ export class MaterialApi {
 
   findAll(): Observable<RawMaterialResponse[]> {
     return this.http.get<RawMaterialResponse[]>(this.baseUrl);
+  }
+
+  getAllMaterials(): Observable<RawMaterial[]> {
+    return this.http.get<RawMaterial[]>(this.baseUrl);
   }
 
   create(payload: RawMaterialRequest): Observable<RawMaterialResponse> {
