@@ -15,16 +15,21 @@ import { ProfileComponent } from './features/users/profile/profile.component';
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
-  { path: "procurement/dashboard", component: DashboardComponent },
-  { path: "procurement/suppliers", component: SuppliersComponent },
-  { path: "procurement/materials", component: MaterialsComponent },
-  { path: "procurement/orders", component: SupplyOrdersComponent },
-  { path: "production/dashboard", component: DC },
-  { path: "production/products", component: ProductsComponent },
-  { path: "production/bill-of-materials", component: BillOfMaterialComponent },
-  { path: "production/production-orders", component: ProductionOrdersComponent },
+
+  // Procurement - Admin Only
+  { path: "procurement/dashboard", component: DashboardComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "procurement/suppliers", component: SuppliersComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "procurement/materials", component: MaterialsComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "procurement/orders", component: SupplyOrdersComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+
+  // Production - ROLE_Admin Only
+  { path: "production/dashboard", component: DC, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "production/products", component: ProductsComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "production/bill-of-materials", component: BillOfMaterialComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "production/production-orders", component: ProductionOrdersComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
-  { path: "profile", component: ProfileComponent },
+  { path: "profile", component: ProfileComponent, canActivate: [authGuard] }, // Authenticated users only, no specific role checks for basic profile
   { path: "**", redirectTo: "" },
 ];

@@ -63,6 +63,15 @@ export class AuthService {
         return !!this.currentUser();
     }
 
+    hasAnyRole(requiredRoles: string[]): boolean {
+        const user = this.currentUser();
+        if (!user || !user.roles) return false;
+
+        // Normalize roles (handle potentially missing 'ROLE_' prefix in comparison if needed, 
+        // though typically we store 'ROLE_ADMIN' directly)
+        return user.roles.some(role => requiredRoles.includes(role));
+    }
+
     private decodeAndSetUser(token: string) {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
