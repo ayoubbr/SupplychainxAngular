@@ -19,15 +19,3 @@ export interface RawMaterialQuantity {
   name: string;
   quantity: number;
 }
-
-export interface SupplyOrderRequest {
-  orderDate: string;
-  supplierId: number; // not used per item, but backend requires it → we'll take main supplier
-  status: string;
-  rawMaterials: RawMaterialWithQuantity[];
-}
-
-export interface RawMaterialWithQuantity {
-  rawMaterialId: number;
-  quantity: number;
-}

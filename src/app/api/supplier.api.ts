@@ -17,12 +17,6 @@ export interface SupplierRequest {
   leadTime: number;
 }
 
-export interface Supplier {
-  id: number;
-  name: string;
-}
-
-
 @Injectable({providedIn: 'root'})
 export class SupplierApi {
 
