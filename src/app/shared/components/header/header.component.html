@@ -8,10 +8,24 @@
       <a href="#" class="nav-link">Accueil</a>
       <a routerLink="/procurement/dashboard" class="nav-link">Procurement</a>
       <a routerLink="/production/dashboard" class="nav-link">Production</a>
+      <a routerLink="/delivery/dashboard" class="nav-link">Delivery</a>
     </nav>
 
     <div class="header-actions">
-      <a href="/login" class="btn-login">Connexion</a>
+
+
+      @if (!authService.currentUser()) {
+        <a href="/login" class="btn-login">Connexion</a>
+      } @else {
+        <div class="user-menu">
+          <a routerLink="/profile" class="profile-link">
+            <span>{{ authService.currentUser()?.username?.charAt(0)?.toUpperCase() }}</span>
+            {{ authService.currentUser()?.username }}
+          </a>
+          <button class="btn-logout" (click)="authService.logout()">Logout</button>
+        </div>
+      }
+
       <button class="menu-toggle" (click)="toggleMenu()">
         <span></span>
         <span></span>

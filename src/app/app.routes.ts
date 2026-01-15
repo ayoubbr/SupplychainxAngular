@@ -28,6 +28,12 @@ export const routes: Routes = [
   { path: "production/bill-of-materials", component: BillOfMaterialComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
   { path: "production/production-orders", component: ProductionOrdersComponent, canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
 
+  // Delivery - ROLE_ADMIN
+  { path: "delivery/dashboard", loadComponent: () => import('./features/delivery/dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "delivery/customers", loadComponent: () => import('./features/delivery/customers/customers.component').then(m => m.CustomersComponent), canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "delivery/orders", loadComponent: () => import('./features/delivery/orders/orders.component').then(m => m.OrdersComponent), canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+  { path: "delivery/deliveries", loadComponent: () => import('./features/delivery/deliveries/deliveries.component').then(m => m.DeliveriesComponent), canActivate: [authGuard], data: { roles: ['ROLE_ADMIN'] } },
+
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent },
   { path: "profile", component: ProfileComponent, canActivate: [authGuard] }, // Authenticated users only, no specific role checks for basic profile
