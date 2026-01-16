@@ -24,6 +24,8 @@
   --hover-bg: rgba(0, 0, 0, 0.05);
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  --active-link-color: blue;
 }
 
 [data-theme="dark"] {
@@ -47,6 +49,8 @@
   --hover-bg: rgba(255, 255, 255, 0.1);
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+
+  --active-link-color: red;
 }
 
 * {
@@ -193,4 +197,9 @@ textarea:focus {
   justify-content: center;
   align-items: center;
   gap: 10px;
+}
+
+.active-link {
+  color: var(--active-link-color) !important;
+  /*font-weight: bold !important;*/
 }
