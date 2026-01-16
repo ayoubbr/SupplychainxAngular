@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'app-orders',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
     templateUrl: './orders.component.html',
     styleUrl: './orders.component.css'
 })

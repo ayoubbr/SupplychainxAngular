@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
 @Component({
     selector: 'app-customers',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
     templateUrl: './customers.component.html',
     styleUrl: './customers.component.css'
 })

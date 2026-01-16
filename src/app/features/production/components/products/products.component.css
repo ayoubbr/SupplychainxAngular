@@ -15,21 +15,15 @@
 .page-header h1 {
     font-size: 2rem;
     font-weight: 800;
-    color: #f8fafc;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
 }
 
 .page-header p {
-    color: #94a3b8;
+    color: var(--text-secondary);
 }
 
-.glass-panel {
-    background: rgba(30, 41, 59, 0.4);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(148, 163, 184, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-}
+/* glass-panel removed to use global style */
 
 /* Table */
 .data-table {
@@ -40,21 +34,21 @@
 .data-table th {
     text-align: left;
     padding: 1rem 1.5rem;
-    color: #94a3b8;
+    color: var(--text-secondary);
     font-weight: 600;
     font-size: 0.85rem;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    border-bottom: 1px solid var(--glass-border);
 }
 
 .data-table td {
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.05);
-    color: #cbd5e1;
+    border-bottom: 1px solid var(--glass-border);
+    color: var(--text-primary);
     font-size: 0.95rem;
 }
 
 .data-table tr:hover td {
-    background: rgba(56, 189, 248, 0.05);
+    background: var(--hover-bg);
 }
 
 .status-badge {
@@ -89,6 +83,7 @@
     opacity: 0.7;
     transition: opacity 0.2s;
     font-size: 1rem;
+    color: var(--text-primary);
 }
 
 .btn-icon-small:hover {
@@ -113,9 +108,11 @@
 .form-card {
     width: 100%;
     max-width: 600px;
-    background: #1e293b;
+    background: var(--bg-secondary);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     padding: 20px;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
 }
 
 .form-header {
@@ -126,14 +123,14 @@
 }
 
 .form-header h2 {
-    color: #f8fafc;
+    color: var(--text-primary);
     margin: 0;
 }
 
 .close-btn {
     background: none;
     border: none;
-    color: #94a3b8;
+    color: var(--text-secondary);
     font-size: 1.5rem;
     cursor: pointer;
 }
@@ -152,7 +149,7 @@
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #94a3b8;
+    color: var(--text-secondary);
     font-size: 0.9rem;
 }
 
@@ -160,11 +157,11 @@
 .form-group select,
 .form-group textarea {
     width: 100%;
-    background: rgba(15, 23, 42, 0.3);
-    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: var(--bg-primary);
+    border: 1px solid var(--glass-border);
     padding: 0.75rem;
     border-radius: 6px;
-    color: #f8fafc;
+    color: var(--text-primary);
     font-family: inherit;
 }
 
@@ -173,7 +170,7 @@
 .form-group textarea:focus {
     outline: none;
     border-color: #38bdf8;
-    background: rgba(15, 23, 42, 0.5);
+    background: var(--bg-secondary);
 }
 
 .form-actions {
@@ -196,7 +193,7 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    background: var(--primary-gradient);
     color: white;
     box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2);
 }
@@ -207,12 +204,12 @@
 }
 
 .btn-secondary {
-    background: rgba(30, 41, 59, 0.5);
-    color: #e2e8f0;
-    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: var(--btn-secondary-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--btn-secondary-border);
 }
 
 .btn-secondary:hover {
-    background: rgba(30, 41, 59, 0.8);
-    border-color: rgba(148, 163, 184, 0.4);
+    background: var(--btn-secondary-hover-bg);
+    border-color: var(--glass-border);
 }
