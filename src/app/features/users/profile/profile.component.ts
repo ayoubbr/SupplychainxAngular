@@ -1,6 +1,7 @@
-import { Component, computed, Signal } from '@angular/core';
+import { Component, computed, Signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService, User } from '../../../core/auth/auth.service';
+import { ToastService } from '../../../shared/services/toast.service';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +25,27 @@ import { AuthService, User } from '../../../core/auth/auth.service';
             <label>Username</label>
             <div class="value">{{ user()?.username }}</div>
           </div>
-          <!-- Add more details if available via API call -->
+
+          <div class="tokens-info">
+             <div class="detail-item">
+                <label>Access Token Expires In</label>
+                <div class="value" [class.expired]="accessTokenTimeLeft <= 0">
+                    {{ formatTime(accessTokenTimeLeft) }}
+                </div>
+             </div>
+             <div class="detail-item">
+                <label>Refresh Token Expires In</label>
+                <div class="value" [class.expired]="refreshTokenTimeLeft <= 0">
+                    {{ formatTime(refreshTokenTimeLeft) }}
+                </div>
+             </div>
+          </div>
+
+          <div class="actions">
+             <button class="btn-refresh" (click)="testRefreshToken()">
+                🔄 Test Refresh Token
+             </button>
+          </div>
         </div>
       </div>
     </div>
@@ -58,7 +79,7 @@ import { AuthService, User } from '../../../core/auth/auth.service';
     }
 
     .glass-panel {
-      background: rgba(30, 41, 59, 0.4);
+      /*background: rgba(30, 41, 59, 0.4);*/
       backdrop-filter: blur(12px);
       border: 1px solid rgba(148, 163, 184, 0.1);
       border-radius: 16px;
@@ -102,13 +123,84 @@ import { AuthService, User } from '../../../core/auth/auth.service';
     .detail-item .value {
       color: #f8fafc;
       font-size: 1.1rem;
+      font-family: monospace;
+    }
+
+    .detail-item .value.expired {
+        color: #ef4444;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .btn-refresh {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 600;
+    }
+
+    .btn-refresh:hover {
+        background: rgba(16, 185, 129, 0.3);
+        transform: translateY(-1px);
     }
   `]
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit, OnDestroy {
   user: Signal<User | null>;
+  accessTokenTimeLeft: number = 0;
+  refreshTokenTimeLeft: number = 0;
+  private intervalId: any;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private toastService: ToastService) {
     this.user = this.authService.currentUser;
+  }
+
+  ngOnInit() {
+    this.updateTimes();
+    this.intervalId = setInterval(() => this.updateTimes(), 1000);
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  updateTimes() {
+    const now = Date.now();
+    const accessExp = this.authService.getAccessTokenExpiration();
+    const refreshExp = this.authService.getRefreshTokenExpiration();
+
+    this.accessTokenTimeLeft = accessExp ? Math.floor((accessExp - now) / 1000) : 0;
+    this.refreshTokenTimeLeft = refreshExp ? Math.floor((refreshExp - now) / 1000) : 0;
+  }
+
+  formatTime(seconds: number): string {
+    if (seconds <= 0) return 'Expired';
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}m ${s}s`;
+  }
+
+  testRefreshToken() {
+    this.toastService.info('Refreshing token...');
+    this.authService.refreshToken().subscribe({
+      next: () => {
+        this.toastService.success('Token refreshed successfully!');
+        this.updateTimes(); // Instant update
+      },
+      error: (err) => {
+        this.toastService.error('Failed to refresh token');
+        console.error(err);
+      }
+    });
   }
 }

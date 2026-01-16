@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { AuthApi, AuthResponse, LoginRequest, RegisterRequest } from '../../api/auth.api';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { tap, Observable } from 'rxjs';
 
 export interface User {
     username: string;
@@ -46,6 +46,8 @@ export class AuthService {
     private clearSession() {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('access_token_expires_at');
+        localStorage.removeItem('refresh_token_expires_at');
         this.currentUser.set(null);
         this.router.navigate(['/login']);
     }
@@ -53,13 +55,57 @@ export class AuthService {
     saveTokens(response: AuthResponse) {
         localStorage.setItem('access_token', response.accessToken);
         localStorage.setItem('refresh_token', response.refreshToken);
+
+        const now = Date.now();
+        const accessExpiresAt = now + response.expiresIn;
+        const refreshExpiresAt = now + response.refreshExpiresIn;
+
+        localStorage.setItem('access_token_expires_at', accessExpiresAt.toString());
+        localStorage.setItem('refresh_token_expires_at', refreshExpiresAt.toString());
     }
 
     getAccessToken(): string | null {
         return localStorage.getItem('access_token');
     }
 
+    getRefreshToken(): string | null {
+        return localStorage.getItem('refresh_token');
+    }
+
+    getAccessTokenExpiration(): number | null {
+        const exp = localStorage.getItem('access_token_expires_at');
+        return exp ? parseInt(exp, 10) : null;
+    }
+
+    getRefreshTokenExpiration(): number | null {
+        const exp = localStorage.getItem('refresh_token_expires_at');
+        return exp ? parseInt(exp, 10) : null;
+    }
+
+    refreshToken() {
+        const refreshToken = this.getRefreshToken();
+        if (!refreshToken) {
+            this.clearSession();
+            return new Observable(observer => {
+                observer.error('No refresh token');
+                observer.complete();
+            });
+        }
+
+        return this.api.refreshToken({ refreshToken }).pipe(
+            tap((response: AuthResponse) => {
+                this.saveTokens(response);
+                // Optionally maintain the current user decode but assume user hasn't changed
+                // this.decodeAndSetUser(response.accessToken); 
+            })
+        );
+    }
+
+    // Add imports above if needed: import { Observable } from 'rxjs'; import { tap } from 'rxjs';
+
     isAuthenticated(): boolean {
+        // Also check if token is expired? The server checks, but locally we can check too.
+        // For now, keep existing check.
         return !!this.currentUser();
     }
 
@@ -67,16 +113,12 @@ export class AuthService {
         const user = this.currentUser();
         if (!user || !user.roles) return false;
 
-        // Normalize roles (handle potentially missing 'ROLE_' prefix in comparison if needed, 
-        // though typically we store 'ROLE_ADMIN' directly)
         return user.roles.some(role => requiredRoles.includes(role));
     }
 
     private decodeAndSetUser(token: string) {
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
-            // Expecting payload to have 'sub' and 'roles' as per standard JWT or Spring Security
-            // Handle roles whether they are ["ROLE"] or [{authority: "ROLE"}]
             let roles: string[] = [];
             if (Array.isArray(payload.roles)) {
                 roles = payload.roles.map((r: any) => {
